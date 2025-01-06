@@ -19,10 +19,10 @@ async function insertEvent(eventData) {
         const safeEnv = Array.isArray(env) ? env : [];
 
         const attributesKey = safeAttributes.map((attr) => attr.key);
-        const attributesValue = safeEnv.map((attr) => attr.value);
+        const attributesValue = safeAttributes.map((attr) => attr.value);
 
-        const envKey = env.map((envItem) => envItem.key);
-        const envValue = env.map((envItem) => envItem.value);
+        const envKey = safeEnv.map((envItem) => envItem.key);
+        const envValue = safeEnv.map((envItem) => envItem.value);
 
         // 执行插入操作
         await clickhouse.insert({
