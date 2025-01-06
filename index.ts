@@ -90,7 +90,7 @@ const server = serve({
         if (req.method === 'POST') {
             return handleTrackEvent(req);
         }
-        return new Response('Not Found', { status: 404 });
+        return new Response('Not Found', { status: 404, headers: { 'Access-Control-Allow-Origin': '*' } });
     },
 });
 
