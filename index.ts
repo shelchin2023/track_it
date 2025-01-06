@@ -62,7 +62,7 @@ export async function handleTrackEvent(req) {
         ) {
             return new Response(
                 JSON.stringify({ error: 'Invalid data structure' }),
-                { status: 400, headers: { 'Content-Type': 'application/json' } }
+                { status: 400, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
             );
         }
 
@@ -72,14 +72,14 @@ export async function handleTrackEvent(req) {
         // 返回成功响应
         return new Response(
             JSON.stringify({ status: 'success', message: 'Event inserted' }),
-            { status: 200, headers: { 'Content-Type': 'application/json' } }
+            { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
         );
     } catch (error) {
         console.error('Error handling event:', error.message);
 
         return new Response(
             JSON.stringify({ status: 'error', message: 'Failed to insert event' }),
-            { status: 500, headers: { 'Content-Type': 'application/json' } }
+            { status: 500, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } }
         );
     }
 }
