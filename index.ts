@@ -84,13 +84,30 @@ export async function handleTrackEvent(req) {
     }
 }
 
+// 定义统一的 CORS 头
+function corsHeaders() {
+    return {
+        'Access-Control-Allow-Origin': '*', // 或指定具体域名
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, DELETE',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        'Access-Control-Allow-Credentials': 'true', // 如果需要传递 cookies 或 authorization
+    };
+}
+
 const server = serve({
     port: 3000,
     async fetch(req) {
+
+        if (req.method === 'OPTIONS') {
+            return new Response(null, {
+                status: 204, // No Content
+                headers: corsHeaders(),
+            });
+        }
         if (req.method === 'POST') {
             return handleTrackEvent(req);
         }
-        return new Response('Not Found', { status: 404, headers: { 'Access-Control-Allow-Origin': '*' } });
+        return new Response('Not Found', { status: 404, headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE' } });
     },
 });
 
