@@ -1,5 +1,4 @@
 import { serve } from 'bun';
-import { v4 as uuidv4 } from 'uuid';
 import { createClient } from '@clickhouse/client'
 
 const clickhouse = createClient({
@@ -12,7 +11,7 @@ const clickhouse = createClient({
 async function insertEvent(eventData) {
     try {
         // 解构请求中的数据
-        const { event_name, app_name, attributes, env, created_at } = eventData;
+        const { event_name, uuid, app_name, attributes, env, created_at } = eventData;
 
         // 将 attributes 和 env 转化用于 ClickHouse 插入的格式
         const attributesKey = attributes.map((attr) => attr.key);
@@ -26,7 +25,7 @@ async function insertEvent(eventData) {
             table: 'events', // ClickHouse 中的表名
             values: [
                 {
-                    id: uuidv4(),                  // 生成 UUID
+                    id: uuid,                  // 生成 UUID
                     app_name: app_name ?? "default", // 应用名称
                     event_name: event_name,        // 事件名称
                     'attributes.key': attributesKey,    // Nested attributes.key 数组
