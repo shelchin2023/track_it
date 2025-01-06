@@ -14,8 +14,12 @@ async function insertEvent(eventData) {
         const { event_name, app_name, attributes, env, created_at } = eventData;
 
         // 将 attributes 和 env 转化用于 ClickHouse 插入的格式
-        const attributesKey = attributes.map((attr) => attr.key);
-        const attributesValue = attributes.map((attr) => attr.value);
+        // 确保 attributes 和 env 为数组
+        const safeAttributes = Array.isArray(attributes) ? attributes : [];
+        const safeEnv = Array.isArray(env) ? env : [];
+
+        const attributesKey = safeAttributes.map((attr) => attr.key);
+        const attributesValue = safeEnv.map((attr) => attr.value);
 
         const envKey = env.map((envItem) => envItem.key);
         const envValue = env.map((envItem) => envItem.value);
