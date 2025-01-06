@@ -1,0 +1,13 @@
+services:
+  track_it:
+    build:
+      context: .   
+      dockerfile: Dockerfile   
+    container_name: track_it  # 容器名称
+    ports:
+      - "23000:3000"  
+    environment:
+      - CLICKHOUSE_HOST
+      - CLICKHOUSE_USER
+      - CLICKHOUSE_PASSWORD
+    restart: always  # 设置容器重启策略
