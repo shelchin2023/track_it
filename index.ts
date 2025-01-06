@@ -2,13 +2,14 @@ import { serve } from 'bun';
 import { v4 as uuidv4 } from 'uuid';
 import { createClient } from '@clickhouse/client'
 
+const clickhouse = createClient({
+    url: Bun.env.CLICKHOUSE_HOST ?? 'http://localhost:8123',
+    username: Bun.env.CLICKHOUSE_USER ?? 'default',
+    password: Bun.env.CLICKHOUSE_PASSWORD ?? '',
+})
+
 // 函数：插入事件数据到 ClickHouse
 async function insertEvent(eventData) {
-    const clickhouse = createClient({
-        url: Bun.env.CLICKHOUSE_HOST ?? 'http://localhost:8123',
-        username: Bun.env.CLICKHOUSE_USER ?? 'default',
-        password: Bun.env.CLICKHOUSE_PASSWORD ?? '',
-    })
     try {
         // 解构请求中的数据
         const { event_name, app_name, attributes, env, created_at } = eventData;
@@ -21,7 +22,7 @@ async function insertEvent(eventData) {
         const envValue = env.map((envItem) => envItem.value);
 
         // 执行插入操作
-        const result = await clickhouse.insert({
+        await clickhouse.insert({
             table: 'events', // ClickHouse 中的表名
             values: [
                 {
@@ -41,7 +42,7 @@ async function insertEvent(eventData) {
             },
             format: 'JSONEachRow',
         });
-        console.log('Event inserted successfully.');
+
     } catch (error) {
         console.error('Error inserting event:', error.message);
 
