@@ -15,8 +15,8 @@ async function insertEvent(eventData) {
 
         // 将 attributes 和 env 转化用于 ClickHouse 插入的格式
         // 确保 attributes 和 env 为数组
-        const safeAttributes = Array.isArray(attributes) ? attributes : [];
-        const safeEnv = Array.isArray(env) ? env : [];
+        const safeAttributes = Array.isArray(attributes) ? attributes : [{ key: 'default', value: 'default' }];
+        const safeEnv = Array.isArray(env) ? env : [{ key: 'default', value: 'default' }];
 
         const attributesKey = safeAttributes.map((attr) => attr.key);
         const attributesValue = safeAttributes.map((attr) => attr.value);
@@ -60,9 +60,7 @@ export async function handleTrackEvent(req) {
 
         // 验证请求数据的完整性
         if (
-            !body.event_name ||
-            !Array.isArray(body.attributes) ||
-            !Array.isArray(body.env)
+            !body.event_name
         ) {
             return new Response(
                 JSON.stringify({ error: 'Invalid data structure' }),
